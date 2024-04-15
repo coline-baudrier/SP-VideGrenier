@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/vide-grenier-en-ligne-master.iml" filepath="$PROJECT_DIR$/.idea/vide-grenier-en-ligne-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/grenier-en-ligne.iml" filepath="$PROJECT_DIR$/.idea/grenier-en-ligne.iml" />
     </modules>
   </component>
 </project>
