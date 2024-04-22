@@ -1,0 +1,29 @@
+services :
+
+  php:
+    image: php:8.2-apache
+    container_name: phpDeveloppementCube
+    ports:
+      - 8029:80
+    volumes:
+      - ./App:/var/www/app
+      - ./Core:/var/www/core
+      - ./logs:/var/www/logs
+      - ./public:/var/www/html
+      - ./sql:/var/www/sql
+      - ./style:/var/www/style
+      - ./vendor:/var/www/vendor
+      - ./:/var/www/src
+    build:
+      context: .
+      dockerfile: DockerFile
+    depends_on:
+      - composer
+
+  composer:
+    image: composer:latest
+    command: composer install --ignore-platform-reqs --no-interaction
+    volumes:
+      - .:/App
+    working_dir: /App
+
