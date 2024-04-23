@@ -6,6 +6,8 @@
  * PHP version 7.0
  */
 
+use App\Models\Articles;
+
 session_start();
 
 /**
@@ -14,9 +16,12 @@ session_start();
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 
+
+
 /**
  * Error and Exception handling
  */
+require __DIR__ . '../../Core/Error.php';
 error_reporting(E_ALL);
 set_error_handler('Core\Error::errorHandler');
 set_exception_handler('Core\Error::exceptionHandler');
@@ -49,3 +54,11 @@ try {
             break;
     }
 }
+
+//
+//try {
+//    Articles::testDBConnection();
+//    echo "Connexion réussie à la base de données.";
+//} catch (PDOException $e) {
+//    die("Erreur de connexion à la base de données : " . $e->getMessage());
+//}
