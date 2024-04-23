@@ -47,6 +47,17 @@ Une présentation orale de 20 minutes sera à réaliser et devra montrer :
   - Container pour serveur Web : récupère la branch **Master**
 - [ ] Utilisation d'un système de génération documentaire pour le code API
 
+### Gitflow
+- Chaque collaborateur a créé sa branche (branche « prénom ») pour effectuer les développements demandés.
+- La branche develop est la branche qui rassemblera, au fur et à mesure, le développement de l’API --> y seront mergés les devs effectués et testés au préalable par les collaborateurs.
+- Pour cela, chaque collaborateur souhaitant merger ses modifications sur la branche develop devra en amont créer une merge request.
+- La branche de chaque collaborateur devra être mise à jour fréquemment en récupérant les mises à jour de la branche develop
+- Chaque collaborateur devra versionner (push), à chaque session de travail, son code sur sa branche pour éviter tout problème technique (exemple : panne d’ordi et donc perte du code réalisé pendant un week-end).
+- Les push/commit devront avoir des commentaires pertinents (exemple : "nom de la spec" / CRUD Articles ...)
+- Une fois l’API finie et testée --> merge de la dévelop dans la main avec en commentaire la version  (exemple : API V1).
+- Avec ajout « .n° » pour toutes modifications mineures apportées à l’API terminée (exemple : V1.1 ).
+- Avec changement de numéro de version si modification majeure (V2 dans le cas d’ajout d’une table par exemple)
+
 ## Initialisation du projet
 ### Mise en place du projet back-end
 1. Créez un VirtualHost pointant vers le dossier /public du site web (Apache)
