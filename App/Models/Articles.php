@@ -152,6 +152,10 @@ class Articles extends Model {
         $stmt->execute();
     }
 
+    public static function testDBConnection() {
+        $db = static::getDB();
+    }
+
 
 
 

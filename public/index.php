@@ -6,12 +6,15 @@
  * PHP version 7.0
  */
 
+use App\Models\Articles;
+
 session_start();
 
 /**
  * Composer
  */
 require dirname(__DIR__) . '/vendor/autoload.php';
+
 
 
 
@@ -51,3 +54,11 @@ try {
             break;
     }
 }
+
+//
+//try {
+//    Articles::testDBConnection();
+//    echo "Connexion réussie à la base de données.";
+//} catch (PDOException $e) {
+//    die("Erreur de connexion à la base de données : " . $e->getMessage());
+//}
