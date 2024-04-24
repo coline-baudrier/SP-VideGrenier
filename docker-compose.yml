@@ -6,13 +6,8 @@ services :
     ports:
       - 8029:80
     volumes:
-      - ./App:/var/www/app
-      - ./Core:/var/www/core
-      - ./logs:/var/www/logs
-      - ./public:/var/www/html
-      - ./style:/var/www/style
-      - ./vendor:/var/www/vendor
-      - ./:/var/www/src
+      - ./default.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ./:/var/www
     build:
       context: .
       dockerfile: DockerFile
