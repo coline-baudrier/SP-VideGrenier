@@ -27,7 +27,7 @@ services :
     working_dir: /App
 
   db:
-    image: mysql:8.0
+    image: mysql:8.0.31
     container_name: mysqlDeveloppementCube
     environment:
       MYSQL_ROOT_PASSWORD: pass
