@@ -14,6 +14,7 @@ class Upload {
         $fileExtensionsAllowed = ['jpeg', 'jpg', 'png'];
 
         $fileSize = $file['size'];
+        $maxFileSize= 4 * 1024 * 1024;
         $fileTmpName = $file['tmp_name'];
 
         $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
@@ -26,7 +27,7 @@ class Upload {
             throw new \Exception("This file extension is not allowed. Please upload a JPEG or PNG file");
         }
 
-        if ($fileSize > 4000000) {
+        if ($fileSize > $maxFileSize) {
             throw new \Exception("File exceeds maximum size (4MB)");
         }
 
