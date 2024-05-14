@@ -1,0 +1,42 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: DockerFile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./default.conf:/etc/apache2/sites-enabled/000-default.conf
+      - webdata-prod:/var/www/html/prod
+    environment:
+      - APACHE_LOG_DIR=/var/log/apache2
+    depends_on:
+      - db
+    command: ["/bin/bash", "-c", "/usr/local/bin/init-prod.sh"]
+
+  db:
+    image: mysql:8.0
+    container_name: mysqlProdCube
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: videgrenierenligne
+      MYSQL_USER: webapplication
+      MYSQL_PASSWORD: 653rag9T
+    volumes:
+      - dbdata-prod:/var/lib/mysql
+
+  phpma:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadminProd
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: db
+      PMA_USER: webapplication
+      PMA_PASSWORD: 653rag9T
+      UPLOAD_LIMITE: 20M
+    ports:
+      - 8030:80
+
+volumes:
+  dbdata-prod:
+  webdata-prod:
