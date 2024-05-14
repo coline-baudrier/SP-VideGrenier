@@ -48,15 +48,41 @@ Une présentation orale de 20 minutes sera à réaliser et devra montrer :
 - [ ] Utilisation d'un système de génération documentaire pour le code API
 
 ### Gitflow
-- Chaque collaborateur a créé sa branche (branche « prénom ») pour effectuer les développements demandés.
-- La branche develop est la branche qui rassemblera, au fur et à mesure, le développement de l’API --> y seront mergés les devs effectués et testés au préalable par les collaborateurs.
-- Pour cela, chaque collaborateur souhaitant merger ses modifications sur la branche develop devra en amont créer une merge request.
-- La branche de chaque collaborateur devra être mise à jour fréquemment en récupérant les mises à jour de la branche develop
-- Chaque collaborateur devra versionner (push), à chaque session de travail, son code sur sa branche pour éviter tout problème technique (exemple : panne d’ordi et donc perte du code réalisé pendant un week-end).
-- Les push/commit devront avoir des commentaires pertinents (exemple : "nom de la spec" / CRUD Articles ...)
-- Une fois l’API finie et testée --> merge de la dévelop dans la main avec en commentaire la version  (exemple : API V1).
-- Avec ajout « .n° » pour toutes modifications mineures apportées à l’API terminée (exemple : V1.1 ).
-- Avec changement de numéro de version si modification majeure (V2 dans le cas d’ajout d’une table par exemple)
+- Lorsqu'un collaborateur choisit une **issue** (tâche) à réaliser, il devra **créer une branche** pour l'issue (= une branche par feature). Cette branche sera tirée de la develop à jour et devra respecter un **nommage précis** : n° issue + titre issue.
+exemple : 56-modification-gitflow
+    - Le collaborateur pourra créer la branche depuis l'issue (petite flèche à côté de Create merge request).
+
+- Une fois la feature développée, le collaborateur devra ouvrir une **merge request** avec l'option "Delete source branch when merge request is accepted". On supprime la branche mergée pour éviter de "polluer" le repo avec trop de branches, **mais ce n'est pas obligatoire**. 
+    🔸 De plus, cochez l'option **Squash commits when merge request is accepted** pour que tous les petits commits réalisés lors du développement de la feature soient réunis en un seul commit. Ce qui permettra d'avoir un historique Git plus propre sur la branche "develop".
+    🔸Quand on créé la merge request, il faut **changer le tag** de "En cours" à **"Recette"** pour que les autres membres du groupe soient au courant qu'il y a une **revue à effectuer** avant de merger la feature à la branche "develop".
+    ⚠️ En laissant "Closes #n° issue" dans le commentaire --> l'issue sera fermée une fois que la merge request sera réalisée
+Par défaut, la merge request se créée entre la branche à merger et la branche develop.
+
+⚠️ Les commits et les merges doivent avoir des commentaires précis et compréhensibles.
+
+⚠️ Il faut **mettre à jour sa branche avant de la push** sur le repo distant et de créer une merge request. 
+Pour se faire : 
+    🔸 il faut tout d'abord mettre à jour la branche develop dans son repo local (en ayant switch sur la develop)
+    🔸 ensuite, après être revenu sur la branche de feature, **rebase** la develop mise à jour dans notre branche concernée. 
+
+- La **branche develop** correspond à la branche de l'**environnement de developpement et de test**. Y seront mergés progressivement les développements de features effectués par les collaborateurs.
+- La **branche recette**, correspond à la branche de l'**environnement de pré-production**. Y seront mergés les développements testés et approuvés.
+- La **branche main**, correspond à la branche de l'**environnement de production**. Y seront mergés les versions livrées au client.
+
+### Gestion des issues
+Pour s'organiser, les tâches à réaliser sont retranscrites en issues dans Gitlab. Ces issues sont à se répartir entre chaque membre du groupe pour ne pas avoir de conflits.
+
+- Quand on souhaite réaliser une feature, on **s'affecte l'issue et on change le tag de "backlog" à "En cours"**, pour que les autres membres du groupe soient au courant que vous êtes déjà en train de développer la feature en question.
+
+- Quand on créé la merge request, il faut **changer le tag** de "En cours" à **"Recette"** pour que les autres membres du groupe soient au courant qu'il y a une **revue à effectuer** avant de merger la feature à la branche "develop".
+
+Il existe **2 tableaux de bord** (issue borads) pour ce projet : 
+    🔸**Board** = Pour visualiser rapidement les issues en backlog, en cours de dev. et en recette.
+    🔸**Priority order** = Pour visualiser rapidement l'ordre de priorité des tâches à réaliser.
+
+- Quand on créé une nouvelle issue, ne pas oublier de lui affecter les tags adéquates pour une bonne répartition de l'issue dans les tableaux de bord.
+
+
 
 ## Initialisation du projet
 ### Mise en place du projet back-end
