@@ -2033,111 +2033,48 @@ footer .f-lang .btn-default {
 /*
 * FOOTER END
 */
-/*
-* Content Account
-*/
 .bg-image {
   text-align: center;
 }
 .bg-image img {
   width: 100%;
+  height: auto;
 }
 
 .login-wraper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
   position: relative;
 }
-.login-wraper .login-window {
-  position: absolute;
-  width: 570px;
-  top: 50%;
-  left: 50%;
-  margin-left: -2px;
-  margin-top: -288px;
-}
-.login-wraper .login-window .l-head {
-  background-color: #ffffff;
-  padding: 40px;
-  border-bottom: solid 1px #eceff0;
-  font-weight: 500;
-  font-size: 22px;
-  color: #343434;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-}
-.login-wraper .login-window .l-form {
-  text-align: left;
-  background-color: #fbfdfe;
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-  padding: 25px 70px 70px;
-}
-.login-wraper .login-window .l-form label {
-  font-weight: 500;
-}
-@media only screen and (max-width: 767px) {
-  .login-wraper .login-window .l-form .btn {
-    border-radius: 30px;
-    padding-top: 16px;
-    padding-bottom: 12px;
-  }
-}
-.login-wraper .checkbox {
-  font-weight: normal;
-}
-@media only screen and (max-width: 767px) {
-  .login-wraper .checkbox {
-    margin-bottom: 30px;
-  }
-}
-.login-wraper .checkbox p {
-  margin-bottom: 4px;
-}
-.login-wraper .checkbox .text2 {
-  display: block;
-  font-size: 14px;
-  color: #7e7e7e;
-}
-.login-wraper .ortext {
-  padding-top: 25px;
-  color: #7e7e7e;
-}
-.login-wraper .signuptext {
-  padding-top: 25px;
-  text-align: center;
-  color: #343434;
-  font-weight: 500;
-}
-.login-wraper .signuptext.text-right {
-  text-align: right;
-}
-.login-wraper .forgottext {
-  margin-top: 25px;
-}
-.login-wraper .forgottext a {
-  color: #7e7e7e;
-}
-.login-wraper .forgottext a:hover {
-  text-decoration: underline;
+
+.banner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
 }
 
 .banner-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: -50px;
-  margin-left: -580px;
-  width: 550px;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin-bottom: 20px;
 }
 .banner-text .line {
   height: 1px;
   border-top: solid 1px #ea2c5a;
-  padding-bottom: 50px;
   width: 280px;
+  margin: 0 auto;
 }
 .banner-text .b-text {
   color: #ffffff;
   font-size: 80px;
-  text-align: left;
+  text-align: center;
   line-height: 80px;
 }
 .banner-text .b-text .color-b1 {
@@ -2155,48 +2092,77 @@ footer .f-lang .btn-default {
   text-align: left;
 }
 
-@media (min-width: 100px) and (max-width: 1365px) {
-  .banner-text {
-    position: relative;
-    top: 0;
-    left: 0;
-    margin-top: 0;
-    margin-left: 0;
-    width: auto;
-  }
-  .banner-text .line {
-    display: none;
-  }
-  .banner-text .b-text {
-    color: #000000;
-    font-size: 30px;
-    text-align: center;
-    line-height: 30px;
-    padding-top: 30px;
-  }
-  .banner-text .overtext {
-    margin: 15px 0;
-    color: #a1a1a1;
-    text-align: center;
-  }
+.login-window {
+  width: 90vw;
+  max-width: 600px;
+  padding: 25px;
+  background-color: #fbfdfe;
+  z-index: 2;
+}
+.login-window .l-head {
+  background-color: #ffffff;
+  padding-bottom: 10px;
+  border-bottom: solid 1px #eceff0;
+  font-weight: 500;
+  font-size: 22px;
+  color: #343434;
+  border-radius: 3px;
+}
+.login-window .l-form {
+  text-align: left;
+  background-color: #fbfdfe;
+  padding: 25px;
+}
+.login-window .l-form label {
+  font-weight: 500;
+}
+.login-window .l-form .btn {
+  border-radius: 30px;
+  padding-top: 16px;
+  padding-bottom: 12px;
+}
+
+.checkbox {
+  font-weight: normal;
+  margin-bottom: 30px;
+}
+.checkbox p {
+  margin-bottom: 4px;
+}
+.checkbox .text2 {
+  display: block;
+  font-size: 14px;
+  color: #7e7e7e;
+}
+
+.ortext,
+.signuptext {
+  padding-top: 25px;
+  text-align: center;
+  color: #343434;
+  font-weight: 500;
+}
+.ortext.text-right,
+.signuptext.text-right {
+  text-align: right;
+}
+
+.forgottext {
+  margin-top: 25px;
+}
+.forgottext a {
+  color: #7e7e7e;
+}
+.forgottext a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 767px) {
   .login-wraper .login-window {
-    position: relative;
-    width: auto;
-    top: 0;
-    left: 0;
-    margin-left: 0;
-    margin-top: 0;
-  }
-  .login-wraper .login-window .l-head {
-    padding: 20px 10px;
-  }
-  .login-wraper .login-window .l-form {
-    padding: 25px 20px;
+    width: 90%;
+    padding: 15px;
   }
 }
-/*
-* Content Account END
-*/
 /*
 * Content Single Video
 */
