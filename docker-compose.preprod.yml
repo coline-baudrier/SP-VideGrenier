@@ -12,7 +12,7 @@ services:
       - APACHE_LOG_DIR=/var/log/apache2
     depends_on:
       - db
-    command: ["/bin/bash", "-c", "/usr/local/bin/init-preprod.sh"]
+    command: ["/bin/bash", "/usr/local/bin/init-preprod.sh"]
 
   db:
     image: mysql:8.0
@@ -22,8 +22,11 @@ services:
       MYSQL_DATABASE: videgrenierenligne
       MYSQL_USER: webapplication
       MYSQL_PASSWORD: 653rag9T
+    ports:
+      - 3312:3306
     volumes:
       - dbdata-preprod:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
 
   phpma:
     image: phpmyadmin/phpmyadmin
