@@ -40,6 +40,13 @@ services:
     ports:
       - 8030:80
 
+  composer:
+    image: composer:latest
+    command: composer install --ignore-platform-reqs --no-interaction
+    volumes:
+      - .:/App
+    working_dir: /App
+
 volumes:
   dbdata-preprod:
   webdata-preprod:
