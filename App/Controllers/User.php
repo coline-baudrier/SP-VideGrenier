@@ -51,8 +51,18 @@ class User extends \Core\Controller
 
             // validation
 
-            $this->register($f);
-            // TODO: Rappeler la fonction de login pour connecter l'utilisateur
+            $userId = $this->register($f);
+
+            if ($userId) {
+                if ($this->login($f)) {
+                    header('Location: /account');
+                    exit;
+                } else {
+                    $_SESSION['error'] = 'La connexion auto ne fonctionne pas.';
+                    header('Location: /login');
+                    exit;
+                }
+            }
         }
 
         View::renderTemplate('User/register.html');
