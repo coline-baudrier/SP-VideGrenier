@@ -158,4 +158,39 @@ class User extends \Core\Controller
         return true;
     }
 
+    public function resetAction()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $email = $_POST['email'];
+            $newPassword = $_POST['password'];
+
+            $user = \App\Models\User::getByLogin($email);
+            if ($user) {
+                $salt = $user['salt'];
+                $hashedPassword = Hash::generate($newPassword, $salt);
+
+                if (\App\Models\User::updatePassword($email, $hashedPassword)) {
+                    $_SESSION['success'] = 'Votre mot de passe a été réinitialisé avec succès. Vous pouvez vous connecter.';
+                    header("Location: /login");
+                    exit;
+                } else {
+                    $_SESSION['error'] = "Erreur lors de la réinitialisation du mot de passe.";
+                    header("Location: /reset");
+                    exit;
+                }
+            } else {
+                $_SESSION['error'] = "Aucun utilisateur trouvé avec cet email.";
+                header("Location: /reset");
+                exit;
+            }
+        } else {
+            // Assurez-vous que la session est toujours passée à Twig
+            View::renderTemplate('User/reset.html', [
+                'session' => $_SESSION
+            ]);
+            unset($_SESSION['success']);
+            unset($_SESSION['error']);
+        }
+    }
+
 }
