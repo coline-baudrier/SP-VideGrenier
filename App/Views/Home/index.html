@@ -60,15 +60,12 @@
 
         function getProductsAndRender(option = ''){
             $.ajax({
-                url: "/api/products?sort=" + option,
+                url: "/api/products" + '?sort=' + option,
             }).done(function(result) {
-                console.log(result); // Afficher les données reçues
                 $('#articlelist').empty();
                 for(let i = 0; i < result.length; i++){
-                    renderProduct(result[i]);
+                    renderProduct(result[i])
                 }
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                console.error("Erreur AJAX : " + textStatus, errorThrown); // Gestion des erreurs AJAX
             });
         }
 
