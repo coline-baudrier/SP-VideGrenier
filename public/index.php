@@ -40,6 +40,7 @@ $router->add('reset', ['controller' => 'User', 'action' => 'reset']);
 $router->add('logout', ['controller' => 'User', 'action' => 'logout', 'private' => true]);
 $router->add('account', ['controller' => 'User', 'action' => 'account', 'private' => true]);
 $router->add('terms-of-sales', ['controller' => 'Legal', 'action' => 'termsOfSales']);
+$router->add('terms-of-sales', ['controller' => 'Legal', 'action' => 'termsOfSales']);
 $router->add('terms-of-cookies', ['controller' => 'Legal', 'action' => 'termsCookies']);
 $router->add('terms-of-confidentiality', ['controller' => 'Legal', 'action' => 'termsConfidentiality']);
 $router->add('product', ['controller' => 'Product', 'action' => 'index', 'private' => true]);
