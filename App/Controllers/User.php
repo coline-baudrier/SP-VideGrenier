@@ -7,6 +7,7 @@ use App\Model\UserRegister;
 use App\Models\Articles;
 use App\Utility\Hash;
 use App\Utility\Session;
+use App\Utility\Cookie;
 use \Core\View;
 use Exception;
 use http\Env\Request;
@@ -105,6 +106,23 @@ class User extends \Core\Controller
         }
     }
 
+    public static function loginWithCookie(){
+        
+        // On vérifie si l'utilisateur est connecté et s'il a des cookies
+        if (Cookie::exists("userId")) {
+            $userId = Cookie::get("userId");
+            $user = \App\Models\User::getByLogin($userId);
+            if ($user) {
+                $_SESSION['user'] = [
+                    'id' => $user['id'],
+                    'username' => $user['username']
+                ];
+                return true;
+        }
+    }
+    return false;
+    }
+
     private function login($data){
         try {
             if(!isset($data['email'])){
@@ -117,14 +135,15 @@ class User extends \Core\Controller
                 return false;
             }
 
-            // TODO: Create a remember me cookie if the user has selected the option
-            // to remained logged in on the login form.
-            // https://github.com/andrewdyer/php-mvc-register-login/blob/development/www/app/Model/UserLogin.php#L86
-
             $_SESSION['user'] = array(
                 'id' => $user['id'],
                 'username' => $user['username'],
             );
+           
+           // Vérifie si l'utilisateur a coché "Se souvenir de moi"
+            if (!empty($data['remember-me'])) {
+                Cookie::put("userId", $user['id'], (86400 * 7)); // Le cookie expire dans 7 jours 
+            }
 
             return true;
 
@@ -144,13 +163,11 @@ class User extends \Core\Controller
      */
     public function logoutAction() {
 
-        /*
-        if (isset($_COOKIE[$cookie])){
-            // TODO: Delete the users remember me cookie if one has been stored.
-            // https://github.com/andrewdyer/php-mvc-register-login/blob/development/www/app/Model/UserLogin.php#L148
-        }*/
-        // Destroy all data registered to the session.
-
+        // Suppression du cookie
+        if (Cookie::exists("userId")) {
+            Cookie::delete("userId");
+        }
+        // Nettoyage de la session
         $_SESSION = array();
 
         if (ini_get("session.use_cookies")) {
