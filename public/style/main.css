@@ -768,7 +768,8 @@ video {
   }
 }
 .content-block .cb-header .list-inline {
-  margin: 20px;
+  margin: 0;
+  margin-left: -5px;
   line-height: 34px;
 }
 .content-block .cb-content {
