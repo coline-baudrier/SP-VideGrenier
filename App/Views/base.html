@@ -114,16 +114,19 @@
                         <p>Accueil</p>
                     </a>
                 </li>
+                {% if user is not null %}
                 <li>
                     <a href="/account">
                         <i class="cv cvicon-cv-play-circle"></i>
                         <p>Mon compte</p>
                     </a>
                 </li>
-
+                {% endif %}
             </ul>
         </div>
-        <a href="#" class="btn mobile-menu-logout">Déconnexion</a>
+        {% if user is not null %}
+        <a href="/logout" class="btn mobile-menu-logout">Déconnexion</a>
+        {% endif %}
     </div>
 </div>
 
