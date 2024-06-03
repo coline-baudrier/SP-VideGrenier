@@ -28,22 +28,22 @@
                         <div class="form-group">
                             <label for="username">Nom d'utilisateur</label>
                             <input type="text" class="form-control" id="username" name="username"
-                                   placeholder="John Doe">
+                                   placeholder="John Doe" required>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email</label>
                             <input type="email" class="form-control" id="exampleInputEmail1" name="email"
-                                   placeholder="exemple@gmail.com">
+                                   placeholder="exemple@gmail.com" required>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Mot de passe</label>
                             <input type="password" class="form-control" id="exampleInputPassword1"
-                                   placeholder="**********" name="password">
+                                   placeholder="**********" name="password" required>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword2">Votre mot de passe à nouveau</label>
                             <input type="password" class="form-control" id="exampleInputPassword2"
-                                   placeholder="**********" name="password-check">
+                                   placeholder="**********" name="password-check" required>
                         </div>
                         <div class="row">
                             <div class="col-lg-7"><button type="submit" name="submit" class="btn btn-cv1">Valider
@@ -62,4 +62,37 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+    const form = document.querySelector("form");
+    form.addEventListener("submit", function(event) {
+        let errors = [];
+        const email = document.getElementById("exampleInputEmail1").value;
+        const password = document.getElementById("exampleInputPassword1").value;
+        const passwordCheck = document.getElementById("exampleInputPassword2").value;
+
+        if (!email) {
+            errors.push("L'email est obligatoire.");
+        } else if (!email.match(/^[^@]+@[^@]+\.[^@]+$/)) {
+            errors.push("Le format de l'email n'est pas valide.");
+        }
+
+        if (!password) {
+            errors.push("Le mot de passe est obligatoire.");
+        } else if (password.length < 8) {
+            errors.push("Le mot de passe doit contenir au moins 8 caractères.");
+        }
+
+        if (password !== passwordCheck) {
+            errors.push("Les mots de passe ne correspondent pas.");
+        }
+
+        if (errors.length > 0) {
+            event.preventDefault();
+            alert(errors.join("\n"));
+        }
+    });
+});
+</script>
 {% endblock %}
