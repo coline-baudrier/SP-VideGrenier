@@ -77,10 +77,10 @@ class User extends \Core\Controller
                 $errors['password_match'] = 'Les mots de passe ne correspondent pas.';
             }
     
-            // Requête emailExists à implémenter 
+            /*// Requête emailExists à implémenter 
             if (\App\Models\User::emailExists($f['email'])) {
                 $errors['email_used'] = 'L\'adresse email est déjà utilisée par un autre utilisateur.';
-            }
+            }*/
     
             if(count($errors) == 0) {
                 $userId = $this->register($f);

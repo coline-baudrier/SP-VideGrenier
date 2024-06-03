@@ -188,6 +188,17 @@ a.active {
   background-color: #ffffff;
 }
 
+.small-signup {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #ea2c5a;
+}
+.small-signup:hover {
+  color: #ce1542;
+  text-decoration: underline;
+}
+
 /*
 * General Styles END
 */

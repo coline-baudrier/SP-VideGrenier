@@ -254,6 +254,17 @@ a.active {
   }
 }
 
+.small-signup {
+  display: block;
+  margin-top: 10px;
+  font-size: $fs-sm;
+  color: $c-active;
+  
+  &:hover {
+      color: darken($c-active, 10%);
+      text-decoration: underline;
+  }
+}
 
 /*
 * General Styles END
