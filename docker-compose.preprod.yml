@@ -47,6 +47,18 @@ services:
       - .:/App
     working_dir: /App
 
+  phpunit:
+    build:
+      context: .
+      dockerfile: DockerFile
+    container_name: phpunit
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
+    command: ./vendor/bin/phpunit --configuration phpunit.xml
+    depends_on:
+      - db
+
 volumes:
   dbdata-preprod:
   webdata-preprod:
