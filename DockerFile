@@ -4,13 +4,22 @@ FROM php:8.2-apache
 RUN apt-get update && apt-get install -y --no-install-recommends \
     vim \
     git \
+    zip \
+    unzip \
     && a2enmod rewrite \
     && service apache2 restart
 
 # Définir le ServerName pour Apache
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable mysqli pdo_mysql
+# Installer les extensions PHP nécessaires
+RUN docker-php-ext-install pdo pdo_mysql mysqli && docker-php-ext-enable pdo_mysql mysqli
+
+# Installer Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Installer PHPUnit globalement
+RUN composer global require phpunit/phpunit --prefer-dist
 
 # Copier les fichiers d'initialisation
 COPY init-preprod.sh /usr/local/bin/init-preprod.sh
@@ -18,7 +27,6 @@ COPY init-prod.sh /usr/local/bin/init-prod.sh
 
 # Donner les permissions et rendre les scripts exécutables
 RUN chmod +x /usr/local/bin/init-preprod.sh /usr/local/bin/init-prod.sh
-
 
 # Copier les fichiers de l'application
 ADD . /var/www/

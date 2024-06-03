@@ -1,18 +1,17 @@
-services :
-
+services:
   php:
-    image: php:8.2-apache
+    build:
+      context: .
+      dockerfile: DockerFile
     container_name: phpDeveloppementCube
     ports:
       - 8029:80
     volumes:
       - ./default.conf:/etc/apache2/sites-enabled/000-default.conf
       - ./:/var/www
-    build:
-      context: .
-      dockerfile: DockerFile
     depends_on:
       - composer
+      - db
 
   composer:
     image: composer:latest
@@ -45,3 +44,15 @@ services :
       UPLOAD_LIMITE: 20M
     ports:
       - 8030:80
+
+  phpunit:
+    build:
+      context: .
+      dockerfile: DockerFile
+    container_name: phpunit
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
+    command: ./vendor/bin/phpunit --configuration phpunit.xml
+    depends_on:
+      - db
