@@ -26,13 +26,28 @@ class User extends \Core\Controller
     {
         if(isset($_POST['submit'])){
             $f = $_POST;
-
-            // TODO: Validation
-
-            $this->login($f);
-
-            // Si login OK, redirige vers le compte
-            header('Location: /account');
+    
+            // Validation
+            $errors = [];
+            if(empty($f['email'])) {
+                $errors['email'] = 'L\'email est obligatoire.';
+            } elseif (!filter_var($f['email'], FILTER_VALIDATE_EMAIL)) {
+                $errors['email'] = 'Le format de l\'email n\'est pas valide.';
+            }
+            if(empty($f['password'])) {
+                $errors['password'] = 'Le mot de passe est obligatoire.';
+            }
+    
+            if(count($errors) == 0) {
+                $this->login($f);
+                header('Location: /account');
+                exit;
+            } else {
+                foreach ($errors as $error) {
+                    // Afficher ou stocker les messages d'erreur
+                    $_SESSION['error_messages'][] = $error;
+                }
+            }
         }
 
         View::renderTemplate('User/login.html');
@@ -45,23 +60,38 @@ class User extends \Core\Controller
     {
         if(isset($_POST['submit'])){
             $f = $_POST;
-
-            if($f['password'] !== $f['password-check']){
-                // TODO: Gestion d'erreur côté utilisateur
+    
+            // Validation
+            $errors = [];
+            if(empty($f['email'])) {
+                $errors['email'] = 'L\'email est obligatoire.';
+            } elseif (!filter_var($f['email'], FILTER_VALIDATE_EMAIL)) {
+                $errors['email'] = 'Le format de l\'email n\'est pas valide.';
             }
-
-            // validation
-
-            $userId = $this->register($f);
-
-            if ($userId) {
-                if ($this->login($f)) {
+            if(empty($f['password'])) {
+                $errors['password'] = 'Le mot de passe est obligatoire.';
+            } elseif (strlen($f['password']) < 8) {
+                $errors['password_length'] = 'Le mot de passe doit contenir au moins 8 caractères.';
+            }
+            if($f['password'] !== $f['password-check']) {
+                $errors['password_match'] = 'Les mots de passe ne correspondent pas.';
+            }
+    
+            // Requête emailExists à implémenter 
+            if (\App\Models\User::emailExists($f['email'])) {
+                $errors['email_used'] = 'L\'adresse email est déjà utilisée par un autre utilisateur.';
+            }
+    
+            if(count($errors) == 0) {
+                $userId = $this->register($f);
+                if ($userId && $this->login($f)) {
                     header('Location: /account');
                     exit;
-                } else {
-                    $_SESSION['error'] = 'La connexion auto ne fonctionne pas.';
-                    header('Location: /login');
-                    exit;
+                }
+            } else {
+                foreach ($errors as $error) {
+                    // Afficher ou stocker les messages d'erreur
+                    $_SESSION['error_messages'][] = $error;
                 }
             }
         }
