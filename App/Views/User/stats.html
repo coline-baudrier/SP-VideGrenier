@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Stats {% endblock %}
+
+{% block body %}
+
+<div class="channel">
+
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 red">
+                    <div class="channel-details">
+                        <div class="row">
+                            <div class="col-lg-10 col-lg-offset-2 col-xs-12" style="background-color: purple;">
+                                <div class="text-center">
+                                    <h1 style="color: white">Statistiques</h1>
+                                </div>
+                                <div class="row list_stat text-left">
+                                    <article style="background-color: yellowgreen; padding: 2px 10px; margin: 5px 0px;">
+                                        <i class="cv cvicon-cv-play-circle"></i>
+                                        <p>Nombre d'annonces en cours</p>
+                                    </article>
+                                    <article style="background-color: yellowgreen; padding: 2px 10px; margin: 5px 0px;">
+                                        <i class="cv cvicon-cv-play-circle"></i>
+                                        <p>Nombre d'utilisateurs </p>
+                                    </article>
+                                    <article style="background-color: yellowgreen; padding: 2px 10px; margin: 5px 0px;">
+                                        <i class="cv cvicon-cv-play-circle"></i>
+                                        <p>Moyenne d'annonces par jour</p>
+                                    </article>
+                                </div>
+                                <!-- liste des articles -->
+                                <div class="cb-content">
+                                    <div class="row" id="articlelist">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-block">
+                        <div class="cb-header">
+                            <div class="row">
+                                <div class="col-lg-8 col-xs-6" style="background-color: red;">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+
+        function getProductsAndRender(option = ''){
+            $.ajax({
+                url: "/api/products?sort=" + option,
+            }).done(function(result) {
+                console.log(result); // Afficher les données reçues
+                $('#articlelist').empty();
+                for(let i = 0; i < result.length; i++){
+                    renderProduct(result[i]);
+                }
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("Erreur AJAX : " + textStatus, errorThrown); // Gestion des erreurs AJAX
+            });
+        }
+
+
+        function renderProduct($product){
+
+            $('<div class="col-lg-4 col-sm-6 articleitem" id="article-pattern">' +
+                '                                <div class="b-article">' +
+                '                                    <div class="v-desc">' +
+                '                                        <a href="/product/'+ $product.id + '">'+ $product.name+'</a>' +
+                '                                    </div>' +
+                '                                    <p>'+ $product.description.slice(0, 20) + '...</p>' +
+                '                                </div>' +
+                '</div>')
+             .appendTo($('#articlelist'));
+        }
+
+        $( document ).ready(function() {
+            getProductsAndRender();
+        });
+    </script>
+{% endblock %}

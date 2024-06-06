@@ -111,6 +111,15 @@ class User extends \Core\Controller
         ]);
     }
 
+    /**
+     * Affiche les stats
+     */
+    public function statsAction()
+    {
+       View::renderTemplate('User/stats.html', []);
+    }
+
+
     /*
      * Fonction privée pour enregister un utilisateur
      */
@@ -136,21 +145,20 @@ class User extends \Core\Controller
         }
     }
 
-    public static function loginWithCookie(){
-        
+    public static function loginWithCookie(){  
         // On vérifie si l'utilisateur est connecté et s'il a des cookies
-        if (Cookie::exists("userId")) {
-            $userId = Cookie::get("userId");
-            $user = \App\Models\User::getByLogin($userId);
-            if ($user) {
-                $_SESSION['user'] = [
-                    'id' => $user['id'],
-                    'username' => $user['username']
-                ];
-                return true;
+            if (Cookie::exists("userId")) {
+                $userId = Cookie::get("userId");
+                $user = \App\Models\User::getByLogin($userId);
+                if ($user) {
+                    $_SESSION['user'] = [
+                        'id' => $user['id'],
+                        'username' => $user['username']
+                    ];
+                    return true;
+            }
         }
-    }
-    return false;
+        return false;
     }
 
     private function login($data){

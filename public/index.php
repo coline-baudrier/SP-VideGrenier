@@ -39,6 +39,7 @@ $router->add('register', ['controller' => 'User', 'action' => 'register']);
 $router->add('reset', ['controller' => 'User', 'action' => 'reset']);
 $router->add('logout', ['controller' => 'User', 'action' => 'logout', 'private' => true]);
 $router->add('account', ['controller' => 'User', 'action' => 'account', 'private' => true]);
+$router->add('stats', ['controller' => 'User', 'action' => 'stats', 'private' => true]);
 $router->add('terms-of-sales', ['controller' => 'Legal', 'action' => 'termsOfSales']);
 $router->add('terms-of-sales', ['controller' => 'Legal', 'action' => 'termsOfSales']);
 $router->add('terms-of-cookies', ['controller' => 'Legal', 'action' => 'termsCookies']);
