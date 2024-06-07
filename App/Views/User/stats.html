@@ -12,39 +12,17 @@
                 <div class="col-lg-12 red">
                     <div class="channel-details">
                         <div class="row">
-                            <div class="col-lg-10 col-lg-offset-2 col-xs-12" style="background-color: purple;">
+                            <div class="col-lg-10 col-lg-offset-2 col-xs-12">
                                 <div class="text-center">
                                     <h1 style="color: white">Statistiques</h1>
                                 </div>
                                 <div class="row list_stat text-left">
-                                    <article style="background-color: yellowgreen; padding: 2px 10px; margin: 5px 0px;">
-                                        <i class="cv cvicon-cv-play-circle"></i>
-                                        <p>Nombre d'annonces en cours</p>
+                                    <article style="display: flex; flex-direction: row; padding: 2px 10px; margin: 5px 0px;" id="amountProducts">
                                     </article>
-                                    <article style="background-color: yellowgreen; padding: 2px 10px; margin: 5px 0px;">
-                                        <i class="cv cvicon-cv-play-circle"></i>
-                                        <p>Nombre d'utilisateurs </p>
+                                    <article style="display: flex; flex-direction: row; padding: 2px 10px; margin: 5px 0px;" id="amountUsers">
                                     </article>
-                                    <article style="background-color: yellowgreen; padding: 2px 10px; margin: 5px 0px;">
-                                        <i class="cv cvicon-cv-play-circle"></i>
-                                        <p>Moyenne d'annonces par jour</p>
+                                    <article style="display: flex; flex-direction: row; padding: 2px 10px; margin: 5px 0px;" id="productsPerDay">
                                     </article>
-                                </div>
-                                <!-- liste des articles -->
-                                <div class="cb-content">
-                                    <div class="row" id="articlelist">
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="content-block">
-                        <div class="cb-header">
-                            <div class="row">
-                                <div class="col-lg-8 col-xs-6" style="background-color: red;">
-                                    
                                 </div>
                             </div>
                         </div>
@@ -60,36 +38,66 @@
 {% block javascript %}
     <script type="text/javascript">
 
-        function getProductsAndRender(option = ''){
+        function getAmountProducts(option = ''){
             $.ajax({
                 url: "/api/products?sort=" + option,
-            }).done(function(result) {
-                console.log(result); // Afficher les données reçues
-                $('#articlelist').empty();
-                for(let i = 0; i < result.length; i++){
-                    renderProduct(result[i]);
-                }
+            }).done(function(result1) {
+                console.log(result1); // Afficher les données reçues
+                $('#nProducts').empty();
+                renderAmountProducts(result1.length);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 console.error("Erreur AJAX : " + textStatus, errorThrown); // Gestion des erreurs AJAX
             });
         }
+        function renderAmountProducts($amount){
+            $('<p>Annonces en cours : </p>' +
+                '<p>'+ $amount+'</p>')
+            .appendTo($('#amountProducts'));
+        }
 
+        function getAmountUsers(option = ''){
+            $.ajax({
+                url: "/api/users?sort=" + option,
+            }).done(function(result2) {
+                console.log(result2); // Afficher les données reçues
+                $('#nUsers').empty();
+                renderAmountUsers(result2.length);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("Erreur AJAX : " + textStatus, errorThrown); // Gestion des erreurs AJAX
+            });
+        }
+        function renderAmountUsers($amount){
+            $('<p>Utilisateurs : </p>' +
+                '<p>'+ $amount+'</p>')
+            .appendTo($('#amountUsers'));
+        }
 
-        function renderProduct($product){
-
-            $('<div class="col-lg-4 col-sm-6 articleitem" id="article-pattern">' +
-                '                                <div class="b-article">' +
-                '                                    <div class="v-desc">' +
-                '                                        <a href="/product/'+ $product.id + '">'+ $product.name+'</a>' +
-                '                                    </div>' +
-                '                                    <p>'+ $product.description.slice(0, 20) + '...</p>' +
-                '                                </div>' +
-                '</div>')
-             .appendTo($('#articlelist'));
+        function getProductsPerDay(option = 'perDay'){
+            $.ajax({
+                url: "/api/products?sort=" + option,
+            }).done(function(result3) {
+                console.log(result3); // Afficher les données reçues
+                $('#perDay').empty();
+                renderProductsPerDay(result3.length);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("Erreur AJAX : " + textStatus, errorThrown); // Gestion des erreurs AJAX
+            });
+        }
+        function renderProductsPerDay($amount){
+            $('<p>Annonces parues ce jour : </p>' +
+                '<p>'+ $amount+'</p>')
+            .appendTo($('#productsPerDay'));
         }
 
         $( document ).ready(function() {
-            getProductsAndRender();
+            getAmountProducts();
+            getAmountUsers();
+            getProductsPerDay();
         });
+
+        
     </script>
 {% endblock %}
+
+
+                                        

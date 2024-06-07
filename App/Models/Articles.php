@@ -24,6 +24,8 @@ class Articles extends Model {
 
         $query = 'SELECT * FROM articles ';
 
+        $aujourdhui = date('Y-m-d'); // Obtenir la date du jour au format YYYY-MM-DD
+
         switch ($filter){
             case 'views':
                 $query .= ' ORDER BY articles.views DESC';
@@ -31,10 +33,14 @@ class Articles extends Model {
             case 'date':
                 $query .= ' ORDER BY articles.published_date DESC';
                 break;
+            case 'perDay':
+                $query .= ' WHERE DATE(articles.published_date) = ' . $aujourdhui;
+                echo($aujourdhui);
+                break;
             case '':
                 break;
         }
-
+        
         $stmt = $db->query($query);
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);

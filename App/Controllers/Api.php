@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Articles;
 use App\Models\Cities;
+use App\Models\User;
 use \Core\View;
 use Exception;
 
@@ -26,6 +27,21 @@ class Api extends \Core\Controller
 
         header('Content-Type: application/json');
         echo json_encode($articles);
+    }
+
+    /**
+     * Affiche la liste des utilisateurs
+     *
+     * @throws Exception
+     */
+    public function UsersAction()
+    {
+        $query = $_GET['sort'];
+
+        $users = User::getAll($query);
+
+        header('Content-Type: application/json');
+        echo json_encode($users);
     }
 
     /**
