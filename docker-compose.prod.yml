@@ -12,7 +12,7 @@ services:
       - APACHE_LOG_DIR=/var/log/apache2
     depends_on:
       - db
-    command: ["/bin/bash", "-c", "/usr/local/bin/init-prod.sh"]
+    command: ["/bin/bash", "/usr/local/bin/init-prod.sh"]
 
   db:
     image: mysql:8.0
@@ -22,8 +22,11 @@ services:
       MYSQL_DATABASE: videgrenierenligne
       MYSQL_USER: webapplication
       MYSQL_PASSWORD: 653rag9T
+    ports:
+      - 3312:3306
     volumes:
       - dbdata-prod:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
 
   phpma:
     image: phpmyadmin/phpmyadmin
@@ -36,6 +39,25 @@ services:
       UPLOAD_LIMITE: 20M
     ports:
       - 8030:80
+
+  composer:
+    image: composer:latest
+    command: composer install --ignore-platform-reqs --no-interaction
+    volumes:
+      - .:/App
+    working_dir: /App
+
+  phpunit:
+    build:
+      context: .
+      dockerfile: DockerFile
+    container_name: phpunit
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
+    command: ./vendor/bin/phpunit --configuration phpunit.xml
+    depends_on:
+      - db
 
 volumes:
   dbdata-prod:

@@ -40,6 +40,25 @@ services:
     ports:
       - 8030:80
 
+  composer:
+    image: composer:latest
+    command: composer install --ignore-platform-reqs --no-interaction
+    volumes:
+      - .:/App
+    working_dir: /App
+
+  phpunit:
+    build:
+      context: .
+      dockerfile: DockerFile
+    container_name: phpunit
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
+    command: ./vendor/bin/phpunit --configuration phpunit.xml
+    depends_on:
+      - db
+
 volumes:
   dbdata-preprod:
   webdata-preprod:

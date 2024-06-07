@@ -45,6 +45,17 @@ class User extends Model {
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
+    public static function updatePassword($email, $hashedPassword) {
+        $db = static::getDB();
+
+        $stmt = $db->prepare('UPDATE users SET password = :password WHERE email = :email');
+
+        $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':password', $hashedPassword);
+
+        return $stmt->execute();
+    }
+
 
     /**
      * ?
