@@ -34,8 +34,7 @@ class Articles extends Model {
                 $query .= ' ORDER BY articles.published_date DESC';
                 break;
             case 'perDay':
-                $query .= ' WHERE DATE(articles.published_date) = ' . $aujourdhui;
-                echo($aujourdhui);
+                $query .= ' WHERE DATE(articles.published_date) = "' . $aujourdhui . '"';
                 break;
             case '':
                 break;
