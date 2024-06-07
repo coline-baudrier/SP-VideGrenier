@@ -7,7 +7,8 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="/favicon.png">
+    <link rel="icon" href="/images/logo.png">
+    <link rel="manifest" href="/manifest.json">
 
     <title>Vide Grenier En Ligne | {% block title %}{% endblock %}</title>
 
@@ -113,16 +114,19 @@
                         <p>Accueil</p>
                     </a>
                 </li>
+                {% if user is not null %}
                 <li>
                     <a href="/account">
                         <i class="cv cvicon-cv-play-circle"></i>
                         <p>Mon compte</p>
                     </a>
                 </li>
-
+                {% endif %}
             </ul>
         </div>
-        <a href="#" class="btn mobile-menu-logout">Déconnexion</a>
+        {% if user is not null %}
+        <a href="/logout" class="btn mobile-menu-logout">Déconnexion</a>
+        {% endif %}
     </div>
 </div>
 
@@ -133,8 +137,7 @@
             <div class="row">
                 <div class="container padding-def">
                     <div class="col-lg-1  col-sm-2 col-xs-12 footer-logo">
-                        <!--<a class="navbar-brand" href="index.html"><img src="images/logo.png" alt="Project name" class="logo" /></a>-->
-                        <a class="navbar-brand" href="index.html">
+                        <a class="navbar-brand" href="/">
                             <img src="/images/logo.png" alt="Vide Grenier en ligne" class="logo" />
                             <span>Vide Grenier en ligne</span>
                         </a>
@@ -142,18 +145,18 @@
                     <div class="col-lg-7 col-sm-6 col-xs-12">
                         <div class="f-copy">
                             <ul class="list-inline">
-                                <li><a href="#">Politique relative aux cookies</a></li>
-                                <li><a href="#">Politique de confidentialité</a></li>
-                                <li>Copyright 2020 <a href="https://www.cesi.fr" class="hidden-xs">CESI</a></li>
+                                <li><a href="/terms-of-cookies">Politique relative aux cookies</a></li>
+                                <li><a href="/terms-of-confidentiality">Politique de confidentialité</a></li>
+                                <li>Copyright 2020 <a href="https://www.cesi.fr" class="hidden-xs" target="_blank">CESI</a></li>
                             </ul>
                         </div>
                     </div>
-                    <div class="col-lg-offset-1 col-lg-3 col-sm-4 col-xs-12">
+                    <div class="col-lg-3 col-sm-4 col-xs-12">
                         <div class="f-last-line">
-                            <div class="f-icon pull-left">
-                                <a href="#"><i class="fa fa-facebook-square"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-google-plus"></i></a>
+                            <div class="" >
+                                <a href="https://www.facebook.com/videGreniersOrg/?locale=fr_FR" target="_blank" style = "margin-left: 1rem"><i class="fa fa-facebook-square"></i></a>
+                                <a href="https://x.com/auvidegrenierfr?lang=fr" target="_blank" style = "margin-left: 1rem"><i class="fa fa-twitter"></i></a>
+                                <a href="https://play.google.com/store/apps/details?id=com.sopheos.videgreniersmobile&hl=fr" target="_blank" style = "margin-left: 1rem"><i class="fa fa-google-plus"></i></a>
                             </div>
                             <div class="clearfix"></div>
                         </div>

@@ -7,6 +7,7 @@ use App\Model\UserRegister;
 use App\Models\Articles;
 use App\Utility\Hash;
 use App\Utility\Session;
+use App\Utility\Cookie;
 use \Core\View;
 use Exception;
 use http\Env\Request;
@@ -25,13 +26,28 @@ class User extends \Core\Controller
     {
         if(isset($_POST['submit'])){
             $f = $_POST;
-
-            // TODO: Validation
-
-            $this->login($f);
-
-            // Si login OK, redirige vers le compte
-            header('Location: /account');
+    
+            // Validation
+            $errors = [];
+            if(empty($f['email'])) {
+                $errors['email'] = 'L\'email est obligatoire.';
+            } elseif (!filter_var($f['email'], FILTER_VALIDATE_EMAIL)) {
+                $errors['email'] = 'Le format de l\'email n\'est pas valide.';
+            }
+            if(empty($f['password'])) {
+                $errors['password'] = 'Le mot de passe est obligatoire.';
+            }
+    
+            if(count($errors) == 0) {
+                $this->login($f);
+                header('Location: /account');
+                exit;
+            } else {
+                foreach ($errors as $error) {
+                    // Afficher ou stocker les messages d'erreur
+                    $_SESSION['error_messages'][] = $error;
+                }
+            }
         }
 
         View::renderTemplate('User/login.html');
@@ -44,15 +60,40 @@ class User extends \Core\Controller
     {
         if(isset($_POST['submit'])){
             $f = $_POST;
-
-            if($f['password'] !== $f['password-check']){
-                // TODO: Gestion d'erreur côté utilisateur
+    
+            // Validation
+            $errors = [];
+            if(empty($f['email'])) {
+                $errors['email'] = 'L\'email est obligatoire.';
+            } elseif (!filter_var($f['email'], FILTER_VALIDATE_EMAIL)) {
+                $errors['email'] = 'Le format de l\'email n\'est pas valide.';
             }
-
-            // validation
-
-            $this->register($f);
-            // TODO: Rappeler la fonction de login pour connecter l'utilisateur
+            if(empty($f['password'])) {
+                $errors['password'] = 'Le mot de passe est obligatoire.';
+            } elseif (strlen($f['password']) < 8) {
+                $errors['password_length'] = 'Le mot de passe doit contenir au moins 8 caractères.';
+            }
+            if($f['password'] !== $f['password-check']) {
+                $errors['password_match'] = 'Les mots de passe ne correspondent pas.';
+            }
+    
+            /*// Requête emailExists à implémenter 
+            if (\App\Models\User::emailExists($f['email'])) {
+                $errors['email_used'] = 'L\'adresse email est déjà utilisée par un autre utilisateur.';
+            }*/
+    
+            if(count($errors) == 0) {
+                $userId = $this->register($f);
+                if ($userId && $this->login($f)) {
+                    header('Location: /account');
+                    exit;
+                }
+            } else {
+                foreach ($errors as $error) {
+                    // Afficher ou stocker les messages d'erreur
+                    $_SESSION['error_messages'][] = $error;
+                }
+            }
         }
 
         View::renderTemplate('User/register.html');
@@ -95,6 +136,23 @@ class User extends \Core\Controller
         }
     }
 
+    public static function loginWithCookie(){
+        
+        // On vérifie si l'utilisateur est connecté et s'il a des cookies
+        if (Cookie::exists("userId")) {
+            $userId = Cookie::get("userId");
+            $user = \App\Models\User::getByLogin($userId);
+            if ($user) {
+                $_SESSION['user'] = [
+                    'id' => $user['id'],
+                    'username' => $user['username']
+                ];
+                return true;
+        }
+    }
+    return false;
+    }
+
     private function login($data){
         try {
             if(!isset($data['email'])){
@@ -107,14 +165,15 @@ class User extends \Core\Controller
                 return false;
             }
 
-            // TODO: Create a remember me cookie if the user has selected the option
-            // to remained logged in on the login form.
-            // https://github.com/andrewdyer/php-mvc-register-login/blob/development/www/app/Model/UserLogin.php#L86
-
             $_SESSION['user'] = array(
                 'id' => $user['id'],
                 'username' => $user['username'],
             );
+           
+           // Vérifie si l'utilisateur a coché "Se souvenir de moi"
+            if (!empty($data['remember-me'])) {
+                Cookie::put("userId", $user['id'], (86400 * 7)); // Le cookie expire dans 7 jours 
+            }
 
             return true;
 
@@ -134,13 +193,11 @@ class User extends \Core\Controller
      */
     public function logoutAction() {
 
-        /*
-        if (isset($_COOKIE[$cookie])){
-            // TODO: Delete the users remember me cookie if one has been stored.
-            // https://github.com/andrewdyer/php-mvc-register-login/blob/development/www/app/Model/UserLogin.php#L148
-        }*/
-        // Destroy all data registered to the session.
-
+        // Suppression du cookie
+        if (Cookie::exists("userId")) {
+            Cookie::delete("userId");
+        }
+        // Nettoyage de la session
         $_SESSION = array();
 
         if (ini_get("session.use_cookies")) {
@@ -156,6 +213,41 @@ class User extends \Core\Controller
         header ("Location: /");
 
         return true;
+    }
+
+    public function resetAction()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $email = $_POST['email'];
+            $newPassword = $_POST['password'];
+
+            $user = \App\Models\User::getByLogin($email);
+            if ($user) {
+                $salt = $user['salt'];
+                $hashedPassword = Hash::generate($newPassword, $salt);
+
+                if (\App\Models\User::updatePassword($email, $hashedPassword)) {
+                    $_SESSION['success'] = 'Votre mot de passe a été réinitialisé avec succès. Vous pouvez vous connecter.';
+                    header("Location: /login");
+                    exit;
+                } else {
+                    $_SESSION['error'] = "Erreur lors de la réinitialisation du mot de passe.";
+                    header("Location: /reset");
+                    exit;
+                }
+            } else {
+                $_SESSION['error'] = "Aucun utilisateur trouvé avec cet email.";
+                header("Location: /reset");
+                exit;
+            }
+        } else {
+            // Assurez-vous que la session est toujours passée à Twig
+            View::renderTemplate('User/reset.html', [
+                'session' => $_SESSION
+            ]);
+            unset($_SESSION['success']);
+            unset($_SESSION['error']);
+        }
     }
 
 }

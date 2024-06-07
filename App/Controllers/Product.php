@@ -24,8 +24,6 @@ class Product extends \Core\Controller
             try {
                 $f = $_POST;
 
-                // TODO: Validation
-
                 $f['user_id'] = $_SESSION['user']['id'];
                 $id = Articles::save($f);
 
@@ -35,7 +33,9 @@ class Product extends \Core\Controller
 
                 header('Location: /product/' . $id);
             } catch (\Exception $e){
-                    var_dump($e);
+                $_SESSION['error'] = $e->getMessage();
+                header('Location: /product/' . $id);
+                exit;
             }
         }
 

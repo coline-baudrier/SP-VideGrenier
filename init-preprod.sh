@@ -29,5 +29,10 @@ fi
 # Copier le contenu du dossier public vers le répertoire de destination
 cp -r $TEMP_DIR/public/* $DEST_DIR
 
+# Option : installer les dépendances, etc.
+#cd $TEMP_DIR
+# composer install
+# php artisan migrate
+
 # Lancer Apache
 apache2-foreground
