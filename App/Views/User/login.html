@@ -22,15 +22,22 @@
                 </div>
                 <div class="l-form">
                     <form action="" method="post" id="loginForm">
+                        <div id="errorMessages" style="color: red;">
+                            {% if error_messages %}
+                                {% for key, message in error_messages %}
+                                    <p>{{ message }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email</label>
                             <input type="email" class="form-control" id="exampleInputEmail1" name="email"
-                                   placeholder="sample@gmail.com" required>
+                                   placeholder="sample@gmail.com">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Password</label>
                             <input type="password" class="form-control" id="exampleInputPassword1"
-                                   name="password" placeholder="**********" required>
+                                   name="password" placeholder="**********">
                         </div>
                         <div class="checkbox">
                             <label>
@@ -67,6 +74,10 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block javascript %}
+
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function() {
         const loginForm = document.getElementById('loginForm');
@@ -87,11 +98,18 @@
 
             if (errors.length > 0) {
                 event.preventDefault();
-                alert(errors.join("\n"));
+
+                const errorDiv = document.getElementById("errorMessages");
+                errorDiv.innerHTML = '';
+
+                errors.forEach(function(error) {
+                    const errorText = document.createElement('p');
+                    errorText.textContent = error;
+                    errorDiv.appendChild(errorText);
+                });
             }
         });
     });
-   
 </script>
 
 {% endblock %}
