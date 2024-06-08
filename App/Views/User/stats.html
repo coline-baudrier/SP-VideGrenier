@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Stats {% endblock %}
+
+{% block body %}
+
+<div class="channel">
+
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 red">
+                    <div class="channel-details">
+                        <div class="row">
+                            <div class="col-lg-10 col-lg-offset-2 col-xs-12">
+                                <div class="text-center" style="display: flex; flex-direction: row; justify-content: center; align-items: baseline;">
+                                    <h1>Statistiques</h1>
+                                </div>
+                                <div class="row list_stat text-left">
+                                    <article style="display: flex; flex-direction: row; padding: 2px 10px; margin: 5px 0px;" id="amountProducts">
+                                    </article>
+                                    <article style="display: flex; flex-direction: row; padding: 2px 10px; margin: 5px 0px;" id="amountUsers">
+                                    </article>
+                                    <article style="display: flex; flex-direction: row; padding: 2px 10px; margin: 5px 0px;" id="productsPerDay">
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript">
+
+        function getAmountProducts(option = ''){
+            $.ajax({
+                url: "/api/products?sort=" + option,
+            }).done(function(result1) {
+                console.log(result1); // Afficher les données reçues
+                $('#nProducts').empty();
+                renderAmountProducts(result1.length);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("Erreur AJAX : " + textStatus, errorThrown); // Gestion des erreurs AJAX
+            });
+        }
+        function renderAmountProducts($amount){
+            $('<i class="cv cvicon-cv-view-stats"></i>' +
+            '<p>Annonces en cours : </p>' +
+                '<p style="padding-left: 10px;">'+ $amount+'</p>')
+            .appendTo($('#amountProducts'));
+        }
+
+        function getAmountUsers(option = ''){
+            $.ajax({
+                url: "/api/users?sort=" + option,
+            }).done(function(result2) {
+                console.log(result2); // Afficher les données reçues
+                $('#nUsers').empty();
+                renderAmountUsers(result2.length);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("Erreur AJAX : " + textStatus, errorThrown); // Gestion des erreurs AJAX
+            });
+        }
+        function renderAmountUsers($amount){
+            $('<i class="cv cvicon-cv-view-stats"></i>' +
+            '<p>Utilisateurs : </p>' +
+                '<p style="padding-left: 10px;">'+ $amount+'</p>')
+            .appendTo($('#amountUsers'));
+        }
+
+        function getProductsPerDay(option = 'perDay'){
+            $.ajax({
+                url: "/api/products?sort=" + option,
+            }).done(function(result3) {
+                console.log(result3); // Afficher les données reçues
+                $('#perDay').empty();
+                renderProductsPerDay(result3.length);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                console.error("Erreur AJAX : " + textStatus, errorThrown); // Gestion des erreurs AJAX
+            });
+        }
+        function renderProductsPerDay($amount){
+            $('<i class="cv cvicon-cv-view-stats"></i>' +
+                '<p>Annonces parues ce jour : </p>' +
+                '<p style="padding-left: 10px;">'+ $amount+'</p>')
+            .appendTo($('#productsPerDay'));
+        }
+
+        $( document ).ready(function() {
+            getAmountProducts();
+            getAmountUsers();
+            getProductsPerDay();
+        });
+
+        
+    </script>
+{% endblock %}
+
+
+                                        

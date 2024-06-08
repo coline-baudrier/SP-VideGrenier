@@ -73,5 +73,31 @@ class User extends Model {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+     /**
+     * ?
+     * @access public
+     * @return string|boolean
+     * @throws Exception
+     */
+    public static function getAll($filter) {
+        $db = static::getDB();
+
+        $query = 'SELECT * FROM users ';
+
+        switch ($filter){
+            case 'views':
+                $query .= ' ORDER BY users.id DESC';
+                break;
+            case 'date':
+                $query .= ' ORDER BY users.username DESC';
+                break;
+            case '':
+                break;
+        }
+
+        $stmt = $db->query($query);
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 
 }

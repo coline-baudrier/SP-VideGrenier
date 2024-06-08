@@ -71,6 +71,9 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="/account">Mon compte</a></li>
                                     <li><a href="/logout">Déconnexion</a></li>
+                                    {% if user.is_admin == false %}
+                                    <li><a href="/stats">Stats</a></li>
+                                    {%endif %}
                                 </ul>
                             </div>
                         </div>
@@ -121,6 +124,14 @@
                         <p>Mon compte</p>
                     </a>
                 </li>
+                {% if user.is_admin == false %}
+                <li>
+                    <a href="/stats">
+                        <i class="cv cvicon-cv-view-stats"></i>
+                        <p>Stats</p>
+                    </a>
+                </li>
+                {% endif %}
                 {% endif %}
             </ul>
         </div>
