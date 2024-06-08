@@ -24,34 +24,40 @@ class User extends \Core\Controller
      */
     public function loginAction()
     {
-        if(isset($_POST['submit'])){
+        if (isset($_POST['submit'])) {
             $f = $_POST;
-    
+
             // Validation
             $errors = [];
-            if(empty($f['email'])) {
+            if (empty($f['email'])) {
                 $errors['email'] = 'L\'email est obligatoire.';
             } elseif (!filter_var($f['email'], FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = 'Le format de l\'email n\'est pas valide.';
             }
-            if(empty($f['password'])) {
+            if (empty($f['password'])) {
                 $errors['password'] = 'Le mot de passe est obligatoire.';
             }
-    
-            if(count($errors) == 0) {
-                $this->login($f);
-                header('Location: /account');
-                exit;
-            } else {
-                foreach ($errors as $error) {
-                    // Afficher ou stocker les messages d'erreur
-                    $_SESSION['error_messages'][] = $error;
+
+            if (count($errors) == 0) {
+                $loginResult = $this->login($f);
+                if ($loginResult === true) {
+                    header('Location: /account');
+                    exit;
+                } else {
+                    $errors['login'] = 'Email ou mot de passe incorrect.';
                 }
             }
+
+            $_SESSION['error_messages'] = $errors;
+            header('Location: /login');
+            exit;
         }
 
-        View::renderTemplate('User/login.html');
+        $errorMessages = isset($_SESSION['error_messages']) ? $_SESSION['error_messages'] : [];
+        unset($_SESSION['error_messages']);
+        View::renderTemplate('User/login.html', ['error_messages' => $errorMessages]);
     }
+
 
     /**
      * Page de création de compte
@@ -186,8 +192,7 @@ class User extends \Core\Controller
             return true;
 
         } catch (Exception $ex) {
-            // TODO : Set flash if error
-            /* Utility\Flash::danger($ex->getMessage());*/
+            return $ex->getMessage();
         }
     }
 
@@ -236,7 +241,7 @@ class User extends \Core\Controller
 
                 if (\App\Models\User::updatePassword($email, $hashedPassword)) {
                     $_SESSION['success'] = 'Votre mot de passe a été réinitialisé avec succès. Vous pouvez vous connecter.';
-                    header("Location: /login");
+                    header("Location: /reset");
                     exit;
                 } else {
                     $_SESSION['error'] = "Erreur lors de la réinitialisation du mot de passe.";
