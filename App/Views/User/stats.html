@@ -13,8 +13,8 @@
                     <div class="channel-details">
                         <div class="row">
                             <div class="col-lg-10 col-lg-offset-2 col-xs-12">
-                                <div class="text-center">
-                                    <h1 style="color: white">Statistiques</h1>
+                                <div class="text-center" style="display: flex; flex-direction: row; justify-content: center; align-items: baseline;">
+                                    <h1>Statistiques</h1>
                                 </div>
                                 <div class="row list_stat text-left">
                                     <article style="display: flex; flex-direction: row; padding: 2px 10px; margin: 5px 0px;" id="amountProducts">
@@ -50,8 +50,9 @@
             });
         }
         function renderAmountProducts($amount){
-            $('<p>Annonces en cours : </p>' +
-                '<p>'+ $amount+'</p>')
+            $('<i class="cv cvicon-cv-view-stats"></i>' +
+            '<p>Annonces en cours : </p>' +
+                '<p style="padding-left: 10px;">'+ $amount+'</p>')
             .appendTo($('#amountProducts'));
         }
 
@@ -67,8 +68,9 @@
             });
         }
         function renderAmountUsers($amount){
-            $('<p>Utilisateurs : </p>' +
-                '<p>'+ $amount+'</p>')
+            $('<i class="cv cvicon-cv-view-stats"></i>' +
+            '<p>Utilisateurs : </p>' +
+                '<p style="padding-left: 10px;">'+ $amount+'</p>')
             .appendTo($('#amountUsers'));
         }
 
@@ -84,8 +86,9 @@
             });
         }
         function renderProductsPerDay($amount){
-            $('<p>Annonces parues ce jour : </p>' +
-                '<p>'+ $amount+'</p>')
+            $('<i class="cv cvicon-cv-view-stats"></i>' +
+                '<p>Annonces parues ce jour : </p>' +
+                '<p style="padding-left: 10px;">'+ $amount+'</p>')
             .appendTo($('#productsPerDay'));
         }
 
