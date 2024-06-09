@@ -47,6 +47,7 @@ $router->add('terms-of-confidentiality', ['controller' => 'Legal', 'action' => '
 $router->add('product', ['controller' => 'Product', 'action' => 'index', 'private' => true]);
 $router->add('product/{id:\d+}', ['controller' => 'Product', 'action' => 'show']);
 $router->add('{controller}/{action}');
+$router->add('api/product/search', ['controller'=> 'Api', 'action' => 'search']);
 
 /*
  * Gestion des erreurs dans le routing

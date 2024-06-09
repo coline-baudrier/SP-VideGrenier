@@ -7,6 +7,7 @@ use App\Core;
 use DateTime;
 use Exception;
 use App\Utility;
+use \PDO;
 
 /**
  * Articles Model
@@ -43,6 +44,22 @@ class Articles extends Model {
         $stmt = $db->query($query);
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public static function search($q)
+    {
+        $db = static::getDB();
+
+        $query = "SELECT *, articles.id as id FROM articles
+        INNER JOIN users ON articles.user_id = users.id
+        WHERE articles.name LIKE :q OR articles.description LIKE :q";
+
+        $stmt = $db->prepare($query);
+
+        $stmt->bindValue(':q', '%'.$q.'%', PDO::PARAM_STR);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -160,8 +177,6 @@ class Articles extends Model {
     public static function testDBConnection() {
         $db = static::getDB();
     }
-
-
 
 
 }
