@@ -25,6 +25,13 @@
                 </div>
                 <div class="l-form">
                     <form method="post" action="">
+                        <div id="errorMessages" style="color: red;">
+                            {% if error_messages %}
+                                {% for key, message in error_messages %}
+                                    <p>{{ message }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
                         <div class="form-group">
                             <label for="username">Nom d'utilisateur</label>
                             <input type="text" class="form-control" id="username" name="username"
@@ -65,34 +72,42 @@
 
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function() {
-    const form = document.querySelector("form");
-    form.addEventListener("submit", function(event) {
-        let errors = [];
-        const email = document.getElementById("exampleInputEmail1").value;
-        const password = document.getElementById("exampleInputPassword1").value;
-        const passwordCheck = document.getElementById("exampleInputPassword2").value;
+        const form = document.querySelector("form");
+        form.addEventListener("submit", function(event) {
+            let errors = [];
+            const email = document.getElementById("exampleInputEmail1").value;
+            const password = document.getElementById("exampleInputPassword1").value;
+            const passwordCheck = document.getElementById("exampleInputPassword2").value;
 
-        if (!email) {
-            errors.push("L'email est obligatoire.");
-        } else if (!email.match(/^[^@]+@[^@]+\.[^@]+$/)) {
-            errors.push("Le format de l'email n'est pas valide.");
-        }
+            if (!email) {
+                errors.push("L'email est obligatoire.");
+            } else if (!email.match(/^[^@]+@[^@]+\.[^@]+$/)) {
+                errors.push("Le format de l'email n'est pas valide.");
+            }
 
-        if (!password) {
-            errors.push("Le mot de passe est obligatoire.");
-        } else if (password.length < 8) {
-            errors.push("Le mot de passe doit contenir au moins 8 caractères.");
-        }
+            if (!password) {
+                errors.push("Le mot de passe est obligatoire.");
+            } else if (password.length < 8) {
+                errors.push("Le mot de passe doit contenir au moins 8 caractères.");
+            }
 
-        if (password !== passwordCheck) {
-            errors.push("Les mots de passe ne correspondent pas.");
-        }
+            if (password !== passwordCheck) {
+                errors.push("Les mots de passe ne correspondent pas.");
+            }
 
-        if (errors.length > 0) {
-            event.preventDefault();
-            alert(errors.join("\n"));
-        }
+            if (errors.length > 0) {
+                event.preventDefault();
+
+                const errorDiv = document.getElementById("errorMessages");
+                errorDiv.innerHTML = '';
+
+                errors.forEach(function(error) {
+                    const errorText = document.createElement('p');
+                    errorText.textContent = error;
+                    errorDiv.appendChild(errorText);
+                });
+            }
+        });
     });
-});
 </script>
 {% endblock %}
