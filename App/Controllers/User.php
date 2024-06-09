@@ -58,7 +58,6 @@ class User extends \Core\Controller
         View::renderTemplate('User/login.html', ['error_messages' => $errorMessages]);
     }
 
-
     /**
      * Page de création de compte
      */
@@ -159,7 +158,8 @@ class User extends \Core\Controller
                 if ($user) {
                     $_SESSION['user'] = [
                         'id' => $user['id'],
-                        'username' => $user['username']
+                        'username' => $user['username'],
+                        'is_admin' =>$user['is_admin']
                     ];
                     return true;
             }
@@ -182,6 +182,7 @@ class User extends \Core\Controller
             $_SESSION['user'] = array(
                 'id' => $user['id'],
                 'username' => $user['username'],
+                'is_admin' =>$user['is_admin'],
             );
            
            // Vérifie si l'utilisateur a coché "Se souvenir de moi"

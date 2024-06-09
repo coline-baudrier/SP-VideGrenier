@@ -66,12 +66,13 @@
                             <div class="btn-group pull-right dropdown">
                                 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     {{ user.username }}
+                                    <!-- {{ user.is_admin }} -->
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a href="/account">Mon compte</a></li>
                                     <li><a href="/logout">Déconnexion</a></li>
-                                    {% if user.is_admin == false %}
+                                    {% if user.is_admin == true %}
                                     <li><a href="/stats">Stats</a></li>
                                     {%endif %}
                                 </ul>
@@ -124,7 +125,7 @@
                         <p>Mon compte</p>
                     </a>
                 </li>
-                {% if user.is_admin == false %}
+                {% if user.is_admin == true %}
                 <li>
                     <a href="/stats">
                         <i class="cv cvicon-cv-view-stats"></i>
