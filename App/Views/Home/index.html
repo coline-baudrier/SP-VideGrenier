@@ -31,12 +31,8 @@
                                         Filtrer par <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a onclick="getProductsAndRender('views')"><i
-                                                class="cv cvicon-cv-relevant"></i>
-                                            Popularité</a></li>
-                                        <li><a onclick="getProductsAndRender('date')"><i
-                                                class="cv cvicon-cv-calender"></i>
-                                            Récent</a></li>
+                                        <li><a onclick="getProductsAndRender('views')"><i class="cv cvicon-cv-relevant"></i> Popularité</a></li>
+                                        <li><a onclick="getProductsAndRender('date')"><i class="cv cvicon-cv-calender"></i> Récent</a></li>
                                     </ul>
                                 </div>
                                 <div class="clearfix"></div>
@@ -47,7 +43,26 @@
                     <!-- liste des articles -->
                     <div class="cb-content">
                         <div class="row" id="articlelist">
-
+                            {% for article in articles %}
+                            <div class="col-lg-4 col-sm-6 articleitem" id="article-pattern">
+                                <div class="b-article">
+                                    <div class="v-img">
+                                        <a href="/product/{{ article.id }}">
+                                            <img src="/images/storage/{{ article.picture }}" alt="">
+                                        </a>
+                                    </div>
+                                    <div class="v-desc">
+                                        <a href="/product/{{ article.id }}">{{ article.name }}</a>
+                                    </div>
+                                    <p>{{ article.description[:20] }}...</p>
+                                    <div class="v-views">
+                                        {{ article.views }} vues
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <p>Aucun article trouvé.</p>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -55,11 +70,11 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
 
 
 {% block javascript %}
+   
     <script type="text/javascript">
 
         function getProductsAndRender(option = ''){

@@ -24,6 +24,19 @@ class Home extends \Core\Controller
         
         \App\Controllers\User::loginWithCookie(); //nom de la fonction des cookies
 
-        View::renderTemplate('Home/index.html', []);
+        $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
+        $articles = $searchQuery ? Articles::search($searchQuery) : Articles::getAll('');
+
+       /* // Debugging
+        echo '<pre>';
+        print_r($articles);
+        echo '</pre>';
+        exit;*/
+
+        View::renderTemplate('Home/index.html', [
+            'articles' => $articles
+        ]);
     }
+
+   
 }
