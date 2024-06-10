@@ -1,0 +1,675 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de videgrenier",
+        "version": "0.1"
+    },
+    "servers": [
+        {
+            "url": "https://localhost:8029"
+        }
+    ],
+    "paths": {
+        "/api/products": {
+            "get": {
+                "summary": "Affiche la liste des articles / produits pour la page d'accueil",
+                "operationId": "e35803db7dc3263e3622538255f4c890",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Critère de tri (views, date, perDay)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des articles",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Articles"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users": {
+            "get": {
+                "summary": "Affiche la liste des utilisateurs",
+                "operationId": "f0a1c70431c87c75881604fa0595797f",
+                "parameters": [
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Critère de tri",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des utilisateurs",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Crée un nouvel utilisateur",
+                "operationId": "ac23746ffa8294804d3a92ed2f7a9e72",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Utilisateur créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/search": {
+            "get": {
+                "summary": "Recherche des articles",
+                "operationId": "f887774e1ccd8c26ef890113f29b8320",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Critère de recherche",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des articles trouvés",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Articles"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/articles": {
+            "get": {
+                "summary": "Récupère tous les articles",
+                "operationId": "116a83a0425d137c8dd82151662b85e4",
+                "parameters": [
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtre pour trier les articles (views, date, perDay)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des articles",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Articles"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/articles/search": {
+            "get": {
+                "summary": "Recherche des articles",
+                "operationId": "f3154ec827d8d1ee79405dc3e975e4d0",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Critère de recherche",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des articles trouvés",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Articles"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/articles/{id}": {
+            "get": {
+                "summary": "Récupère un article par ID",
+                "operationId": "a5129a4b1ae9d9e7e232a29abca33691",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'article",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de l'article",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Articles"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/articles/{id}/views": {
+            "patch": {
+                "summary": "Ajoute une vue à un article",
+                "operationId": "1a0814db3ec1c9e0e86e3ddda813fd5e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'article",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Nombre de vues mis à jour"
+                    }
+                }
+            }
+        },
+        "/api/articles/user/{id}": {
+            "get": {
+                "summary": "Récupère les articles par utilisateur",
+                "operationId": "e0a5fdc4cda61589686d69838aa405ab",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'utilisateur",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Articles de l'utilisateur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Articles"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/articles/suggest": {
+            "get": {
+                "summary": "Récupère les articles suggérés",
+                "operationId": "7d027e177040c239a69a022a4626a787",
+                "responses": {
+                    "200": {
+                        "description": "Articles suggérés",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Articles"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/articles": {
+            "post": {
+                "summary": "Crée un nouvel article",
+                "operationId": "253cc118bac93f39e9866eb88be1026a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Articles"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Article créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Articles"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/articles/{articleId}/picture": {
+            "patch": {
+                "summary": "Ajoute une image à un article",
+                "operationId": "dd0952d38090ac560e2c983d9913aed5",
+                "parameters": [
+                    {
+                        "name": "articleId",
+                        "in": "path",
+                        "description": "ID de l'article",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "pictureName": {
+                                        "description": "Nom de l'image",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Image ajoutée"
+                    }
+                }
+            }
+        },
+        "/api/cities": {
+            "get": {
+                "summary": "Recherche dans la liste des villes",
+                "operationId": "eec1e4d7de655cf3caa3764c458d0038",
+                "parameters": [
+                    {
+                        "name": "query",
+                        "in": "query",
+                        "description": "Critère de recherche",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des villes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Cities"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/{login}": {
+            "get": {
+                "summary": "Récupère un utilisateur par login",
+                "operationId": "92fa4a4b4c8426cf39d05ec690d106ba",
+                "parameters": [
+                    {
+                        "name": "login",
+                        "in": "path",
+                        "description": "Email de l'utilisateur",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails de l'utilisateur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users/password": {
+            "patch": {
+                "summary": "Met à jour le mot de passe de l'utilisateur",
+                "operationId": "c707c6ffaff6fa3577c8eeb5f77f035a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "description": "Email de l'utilisateur",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Nouveau mot de passe",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Mot de passe mis à jour"
+                    }
+                }
+            }
+        },
+        "/api/users/login": {
+            "post": {
+                "summary": "Connecte un utilisateur",
+                "operationId": "8116530e0dcad71327685fef79b984c1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "description": "Email de l'utilisateur",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Mot de passe de l'utilisateur",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Utilisateur connecté"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Articles": {
+                "properties": {
+                    "id": {
+                        "description": "ID de l'article",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "description": "Nom de l'article",
+                        "type": "string"
+                    },
+                    "published_date": {
+                        "description": "Date de publication",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "user_id": {
+                        "description": "ID de l'utilisateur",
+                        "type": "integer"
+                    },
+                    "views": {
+                        "description": "Nombre de vues",
+                        "type": "integer"
+                    },
+                    "picture": {
+                        "description": "URL de l'image",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Cities": {
+                "properties": {
+                    "ville_id": {
+                        "description": "ID de la ville",
+                        "type": "integer"
+                    },
+                    "ville_departement": {
+                        "description": "Département de la ville",
+                        "type": "string"
+                    },
+                    "ville_slug": {
+                        "description": "Slug de la ville",
+                        "type": "string"
+                    },
+                    "ville_nom": {
+                        "description": "Nom de la ville",
+                        "type": "string"
+                    },
+                    "ville_nom_simple": {
+                        "description": "Nom simple de la ville",
+                        "type": "string"
+                    },
+                    "ville_nom_reel": {
+                        "description": "Nom réel de la ville",
+                        "type": "string"
+                    },
+                    "ville_nom_soundex": {
+                        "description": "Nom soundex de la ville",
+                        "type": "string"
+                    },
+                    "ville_nom_metaphone": {
+                        "description": "Nom metaphone de la ville",
+                        "type": "string"
+                    },
+                    "ville_code_postal": {
+                        "description": "Code postal de la ville",
+                        "type": "string"
+                    },
+                    "ville_commune": {
+                        "description": "Commune de la ville",
+                        "type": "string"
+                    },
+                    "ville_code_commune": {
+                        "description": "Code commune de la ville",
+                        "type": "string"
+                    },
+                    "ville_arrondissement": {
+                        "description": "Arrondissement de la ville",
+                        "type": "integer"
+                    },
+                    "ville_canton": {
+                        "description": "Canton de la ville",
+                        "type": "string"
+                    },
+                    "ville_amdi": {
+                        "description": "AMDI de la ville",
+                        "type": "integer"
+                    },
+                    "ville_population_2010": {
+                        "description": "Population de la ville en 2010",
+                        "type": "integer"
+                    },
+                    "ville_population_1999": {
+                        "description": "Population de la ville en 1999",
+                        "type": "integer"
+                    },
+                    "ville_population_2012": {
+                        "description": "Population de la ville en 2012",
+                        "type": "integer"
+                    },
+                    "ville_densite_2010": {
+                        "description": "Densité de la ville en 2010",
+                        "type": "integer"
+                    },
+                    "ville_surface": {
+                        "description": "Surface de la ville",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "ville_longitude_deg": {
+                        "description": "Longitude en degrés",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "ville_latitude_deg": {
+                        "description": "Latitude en degrés",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "ville_longitude_grd": {
+                        "description": "Longitude en GRD",
+                        "type": "string"
+                    },
+                    "ville_latitude_grd": {
+                        "description": "Latitude en GRD",
+                        "type": "string"
+                    },
+                    "ville_longitude_dms": {
+                        "description": "Longitude en DMS",
+                        "type": "string"
+                    },
+                    "ville_latitude_dms": {
+                        "description": "Latitude en DMS",
+                        "type": "string"
+                    },
+                    "ville_zmin": {
+                        "description": "Altitude minimale",
+                        "type": "integer"
+                    },
+                    "ville_zmax": {
+                        "description": "Altitude maximale",
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "properties": {
+                    "id": {
+                        "description": "ID de l'utilisateur",
+                        "type": "integer"
+                    },
+                    "username": {
+                        "description": "Nom d'utilisateur",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "Email de l'utilisateur",
+                        "type": "string"
+                    },
+                    "password": {
+                        "description": "Mot de passe",
+                        "type": "string"
+                    },
+                    "salt": {
+                        "description": "Sel pour le mot de passe",
+                        "type": "string"
+                    },
+                    "is_admin": {
+                        "description": "Indique si l'utilisateur est administrateur",
+                        "type": "boolean"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}

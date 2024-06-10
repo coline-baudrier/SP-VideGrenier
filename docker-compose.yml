@@ -56,3 +56,13 @@ services:
     command: ./vendor/bin/phpunit --configuration phpunit.xml
     depends_on:
       - db
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: swagger-ui
+    ports:
+      - 8031:8080
+    volumes:
+      - ./public/swagger/openapi.json:/usr/share/nginx/html/api/openapi.json
+    environment:
+      SWAGGER_JSON: /usr/share/nginx/html/api/openapi.json

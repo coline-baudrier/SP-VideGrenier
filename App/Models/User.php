@@ -7,6 +7,7 @@ use Core\Model;
 use App\Core;
 use Exception;
 use App\Utility;
+use OpenApi\Annotations as OA;
 
 /**
  * User Model:
@@ -14,7 +15,19 @@ use App\Utility;
 class User extends Model {
 
     /**
-     * Crée un utilisateur
+     * @OA\Post(
+     *     path="/api/users",
+     *     summary="Crée un nouvel utilisateur",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/User")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Utilisateur créé",
+     *         @OA\JsonContent(ref="#/components/schemas/User")
+     *     )
+     * )
      */
     public static function createUser($data) {
         $db = static::getDB();
@@ -31,6 +44,24 @@ class User extends Model {
         return $db->lastInsertId();
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/users/{login}",
+     *     summary="Récupère un utilisateur par login",
+     *     @OA\Parameter(
+     *         name="login",
+     *         in="path",
+     *         description="Email de l'utilisateur",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Détails de l'utilisateur",
+     *         @OA\JsonContent(ref="#/components/schemas/User")
+     *     )
+     * )
+     */
     public static function getByLogin($login)
     {
         $db = static::getDB();
@@ -45,6 +76,23 @@ class User extends Model {
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
+     /**
+     * @OA\Patch(
+     *     path="/api/users/password",
+     *     summary="Met à jour le mot de passe de l'utilisateur",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="email", type="string", description="Email de l'utilisateur"),
+     *             @OA\Property(property="password", type="string", description="Nouveau mot de passe")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Mot de passe mis à jour"
+     *     )
+     * )
+     */
     public static function updatePassword($email, $hashedPassword) {
         $db = static::getDB();
 
@@ -58,7 +106,21 @@ class User extends Model {
 
 
     /**
-     * ?
+     * @OA\Post(
+     *     path="/api/users/login",
+     *     summary="Connecte un utilisateur",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="email", type="string", description="Email de l'utilisateur"),
+     *             @OA\Property(property="password", type="string", description="Mot de passe de l'utilisateur")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Utilisateur connecté"
+     *     )
+     * )
      * @access public
      * @return string|boolean
      * @throws Exception
@@ -74,7 +136,22 @@ class User extends Model {
     }
 
      /**
-     * ?
+     * @OA\Get(
+     *     path="/api/users",
+     *     summary="Affiche la liste des utilisateurs",
+     *     @OA\Parameter(
+     *         name="filter",
+     *         in="query",
+     *         description="Critère de tri",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Liste des utilisateurs",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/User"))
+     *     )
+     * )
      * @access public
      * @return string|boolean
      * @throws Exception
@@ -101,3 +178,4 @@ class User extends Model {
     }
 
 }
+

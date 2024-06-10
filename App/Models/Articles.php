@@ -8,6 +8,7 @@ use DateTime;
 use Exception;
 use App\Utility;
 use \PDO;
+use OpenApi\Annotations as OA;
 
 /**
  * Articles Model
@@ -15,7 +16,22 @@ use \PDO;
 class Articles extends Model {
 
     /**
-     * ?
+     * @OA\Get(
+     *     path="/articles",
+     *     summary="Récupère tous les articles",
+     *     @OA\Parameter(
+     *         name="filter",
+     *         in="query",
+     *         description="Filtre pour trier les articles (views, date, perDay)",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Liste des articles",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Articles")),
+     *     )
+     * )
      * @access public
      * @return string|boolean
      * @throws Exception
@@ -46,6 +62,27 @@ class Articles extends Model {
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/articles/search",
+     *     summary="Recherche des articles",
+     *     @OA\Parameter(
+     *         name="q",
+     *         in="query",
+     *         description="Critère de recherche",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Liste des articles trouvés",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Articles")),
+     *     )
+     * )
+     * @access public
+     * @return string|boolean
+     * @throws Exception
+     */
     public static function search($q)
     {
         $db = static::getDB();
@@ -63,7 +100,23 @@ class Articles extends Model {
     }
 
     /**
-     * ?
+     * @OA\Get(
+     *     path="/articles/{id}",
+     *     summary="Récupère un article par ID",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de l'article",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Détails de l'article",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Articles")),
+     * 
+     *     )
+     * )
      * @access public
      * @return string|boolean
      * @throws Exception
@@ -83,7 +136,21 @@ class Articles extends Model {
     }
 
     /**
-     * ?
+     * @OA\Patch(
+     *     path="/api/articles/{id}/views",
+     *     summary="Ajoute une vue à un article",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de l'article",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Nombre de vues mis à jour"
+     *     )
+     * )
      * @access public
      * @return string|boolean
      * @throws Exception
@@ -100,7 +167,22 @@ class Articles extends Model {
     }
 
     /**
-     * ?
+     * @OA\Get(
+     *     path="/api/articles/user/{id}",
+     *     summary="Récupère les articles par utilisateur",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de l'utilisateur",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Articles de l'utilisateur",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Articles"))
+     *     )
+     * )
      * @access public
      * @return string|boolean
      * @throws Exception
@@ -119,7 +201,15 @@ class Articles extends Model {
     }
 
     /**
-     * ?
+     * @OA\Get(
+     *     path="/api/articles/suggest",
+     *     summary="Récupère les articles suggérés",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Articles suggérés",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Articles"))
+     *     )
+     * )
      * @access public
      * @return string|boolean
      * @throws Exception
@@ -140,7 +230,19 @@ class Articles extends Model {
 
 
     /**
-     * ?
+     * @OA\Post(
+     *     path="/api/articles",
+     *     summary="Crée un nouvel article",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/Articles")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Article créé",
+     *         @OA\JsonContent(ref="#/components/schemas/Articles")
+     *     )
+     * )
      * @access public
      * @return string|boolean
      * @throws Exception
@@ -162,6 +264,34 @@ class Articles extends Model {
         return $db->lastInsertId();
     }
 
+
+    /**
+     * @OA\Patch(
+     *     path="/api/articles/{articleId}/picture",
+     *     summary="Ajoute une image à un article",
+     *     @OA\Parameter(
+     *         name="articleId",
+     *         in="path",
+     *         description="ID de l'article",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="pictureName", type="string", description="Nom de l'image")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Image ajoutée"
+     *     )
+     * )
+     * @access public
+     * @return string|boolean
+     * @throws Exception
+     */
+
     public static function attachPicture($articleId, $pictureName){
         $db = static::getDB();
 
@@ -180,3 +310,4 @@ class Articles extends Model {
 
 
 }
+

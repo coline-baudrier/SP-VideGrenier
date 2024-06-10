@@ -7,21 +7,41 @@ use App\Models\Cities;
 use App\Models\User;
 use \Core\View;
 use Exception;
+use OpenApi\Annotations as OA;
 
 /**
- * API controller
+ *   @OA\Info(
+ *     title="API de videgrenier",
+ *     version="0.1")
+ *   @OA\Server(
+ *      url="https://localhost:8029"),
+ *      description="API vide grenier"
+ * )
  */
 class Api extends \Core\Controller
 {
 
     /**
-     * Affiche la liste des articles / produits pour la page d'accueil
-     *
-     * @throws Exception
+     *   @OA\Get(
+     *     path="/api/products",
+     *     summary="Affiche la liste des articles / produits pour la page d'accueil",
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         description="Critère de tri (views, date, perDay)",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Liste des articles",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Articles"))
+     *     )
+     * )
      */
     public function ProductsAction()
     {
-        $query = $_GET['sort'];
+        $query = $_GET['sort'] ?? '';
 
         $articles = Articles::getAll($query);
 
@@ -30,13 +50,26 @@ class Api extends \Core\Controller
     }
 
     /**
-     * Affiche la liste des utilisateurs
-     *
-     * @throws Exception
+     *   @OA\Get(
+     *     path="/api/users",
+     *     summary="Affiche la liste des utilisateurs",
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         description="Critère de tri",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Liste des utilisateurs",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/User"))
+     *     )
+     * )
      */
     public function UsersAction()
     {
-        $query = $_GET['sort'];
+        $query = $_GET['sort'] ?? '';
 
         $users = User::getAll($query);
 
@@ -45,9 +78,22 @@ class Api extends \Core\Controller
     }
 
     /**
-     * Recherche dans la liste des villes
-     *
-     * @throws Exception
+     *   @OA\Get(
+     *     path="/api/cities",
+     *     summary="Recherche dans la liste des villes",
+     *     @OA\Parameter(
+     *         name="query",
+     *         in="query",
+     *         description="Critère de recherche",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Liste des villes"
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Cities"))
+     *     )
+     * )
      */
     public function CitiesAction(){
 
@@ -58,6 +104,24 @@ class Api extends \Core\Controller
     }
 
 
+    /**
+     *   @OA\Get(
+     *     path="/api/search",
+     *     summary="Recherche des articles",
+     *     @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         description="Critère de recherche",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Liste des articles trouvés",
+     *         @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Articles"))
+     *     )
+     * )
+     */
     public function searchAction()
     {
 
@@ -68,5 +132,6 @@ class Api extends \Core\Controller
         header('Content-Type: application/json');
         echo json_encode($articles);
     }
+
 
 }
